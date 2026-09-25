@@ -900,25 +900,21 @@ body {
     text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.6);
 }
 
-/* Jarak Orbit DIPERBESAR (TranslateZ) agar kartu tidak berdempetan */
+/* Jarak Orbit — 4 kartu, 90° per kartu */
 .item1 {
-    transform: rotateY(0deg) translateZ(340px);
+    transform: rotateY(0deg) translateZ(280px);
 }
 
 .item2 {
-    transform: rotateY(72deg) translateZ(340px);
+    transform: rotateY(90deg) translateZ(280px);
 }
 
 .item3 {
-    transform: rotateY(144deg) translateZ(340px);
+    transform: rotateY(180deg) translateZ(280px);
 }
 
 .item4 {
-    transform: rotateY(216deg) translateZ(340px);
-}
-
-.item5 {
-    transform: rotateY(288deg) translateZ(340px);
+    transform: rotateY(270deg) translateZ(280px);
 }
 
 /* =========================================
@@ -971,7 +967,7 @@ body {
 #modal-iframe.iframe-spotify {
     width: 90vw;
     max-width: 350px;
-    height: 152px;
+    height: 352px;
 }
 
 /* Rasio khusus untuk YouTube (16:9 Landscape) */
@@ -1431,25 +1427,21 @@ body {
         font-size: 0.95rem;
     }
 
-    /* Menyesuaikan jarak orbit di HP */
+    /* Menyesuaikan jarak orbit di HP — 4 kartu */
     .item1 {
-        transform: rotateY(0deg) translateZ(200px);
+        transform: rotateY(0deg) translateZ(180px);
     }
 
     .item2 {
-        transform: rotateY(72deg) translateZ(200px);
+        transform: rotateY(90deg) translateZ(180px);
     }
 
     .item3 {
-        transform: rotateY(144deg) translateZ(200px);
+        transform: rotateY(180deg) translateZ(180px);
     }
 
     .item4 {
-        transform: rotateY(216deg) translateZ(200px);
-    }
-
-    .item5 {
-        transform: rotateY(288deg) translateZ(200px);
+        transform: rotateY(270deg) translateZ(180px);
     }
 
     #main-content {
@@ -2702,5 +2694,346 @@ body {
         font-size: 1em;
         padding: 10px 20px;
         transform: translateX(20px);
+    }
+}
+
+/* =========================================
+   SECTION: JUST YOU & ME - VIDEO MEMORIES
+========================================= */
+.video-memories-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.video-memories-title {
+    margin-bottom: 5px;
+}
+
+.title-just-you {
+    font-size: 2.2em;
+    display: inline-block;
+    padding: 18px 40px;
+    white-space: nowrap;
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% {
+        text-shadow: 2px 2px 8px rgba(230, 168, 0, 0.4);
+        filter: brightness(1);
+    }
+    50% {
+        text-shadow: 2px 2px 20px rgba(230, 168, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.3);
+        filter: brightness(1.05);
+    }
+}
+
+/* Video Preview Container */
+.video-memories-container {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow:
+        0 10px 40px rgba(200, 150, 0, 0.3),
+        0 0 0 2px rgba(230, 168, 0, 0.3),
+        inset 0 0 30px rgba(255, 235, 59, 0.1);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+    animation: videoContainerFloat 5s ease-in-out infinite;
+}
+
+.video-memories-container:hover,
+.video-memories-container:active {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow:
+        0 15px 50px rgba(200, 150, 0, 0.4),
+        0 0 0 2px rgba(230, 168, 0, 0.5),
+        0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+@keyframes videoContainerFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.video-memories-container video {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    display: block;
+    background: #1a1400;
+}
+
+/* Play Overlay */
+.video-play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.5) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    z-index: 2;
+    transition: background 0.3s ease;
+}
+
+.video-memories-container:hover .video-play-overlay {
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.05) 0%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgba(0, 0, 0, 0.4) 100%
+    );
+}
+
+.video-play-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(230, 168, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 25px rgba(230, 168, 0, 0.5), 0 0 0 6px rgba(255, 235, 59, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: playBtnPulse 2.5s ease-in-out infinite;
+}
+
+.video-play-btn svg {
+    margin-left: 5px; /* slight offset to visually center the play triangle */
+}
+
+@keyframes playBtnPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 5px 25px rgba(230, 168, 0, 0.5), 0 0 0 6px rgba(255, 235, 59, 0.2);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 8px 35px rgba(230, 168, 0, 0.6), 0 0 0 12px rgba(255, 235, 59, 0.15);
+    }
+}
+
+.video-memories-container:hover .video-play-btn {
+    transform: scale(1.1);
+    box-shadow: 0 8px 35px rgba(230, 168, 0, 0.7), 0 0 0 10px rgba(255, 235, 59, 0.3);
+}
+
+.video-tap-hint {
+    color: #fff9c4;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    animation: hintFade 3s ease-in-out infinite;
+}
+
+@keyframes hintFade {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* "always" subtitle (styled like "of Us" under "Core Memories") */
+.title-always {
+    font-size: 1.2em;
+    display: inline-block;
+    padding: 15px 30px;
+    opacity: 0.9;
+    transform: translateX(40px);
+    color: #5a4500;
+    white-space: nowrap;
+    letter-spacing: 6px;
+}
+
+/* =========================================
+   VIDEO FULLSCREEN MODAL (Landscape)
+========================================= */
+.video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.video-modal.show-video-modal {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.video-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: rgba(255, 249, 196, 0.15);
+    border: 1px solid rgba(230, 168, 0, 0.3);
+    color: #fff9c4;
+    font-size: 1.5rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s, transform 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.video-modal-close:hover {
+    background: rgba(230, 168, 0, 0.3);
+    transform: scale(1.1);
+}
+
+/* Rotate hint */
+.video-modal-rotate-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    z-index: 100000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.video-modal-rotate-hint.show-rotate-hint {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.rotate-phone-icon {
+    animation: rotatePhoneAnim 2s ease-in-out infinite;
+}
+
+@keyframes rotatePhoneAnim {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-45deg); }
+    50% { transform: rotate(-90deg); }
+    75% { transform: rotate(-45deg); }
+}
+
+.video-modal-rotate-hint p {
+    color: #c89600;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.6;
+    letter-spacing: 1px;
+}
+
+/* Video in modal */
+#video-fullscreen {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    border-radius: 8px;
+    background: #000;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#video-fullscreen.video-playing {
+    opacity: 1;
+}
+
+/* Portrait mode (phone held vertically): show rotate hint, hide video */
+@media (orientation: portrait) {
+    .video-modal.show-video-modal .video-modal-rotate-hint {
+        opacity: 1;
+    }
+    .video-modal.show-video-modal #video-fullscreen {
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+}
+
+/* Landscape mode: hide rotate hint, show video fullscreen */
+@media (orientation: landscape) {
+    .video-modal.show-video-modal .video-modal-rotate-hint {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .video-modal.show-video-modal #video-fullscreen {
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        border-radius: 0;
+    }
+    .video-modal-close {
+        top: 10px;
+        right: 15px;
+        width: 38px;
+        height: 38px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Desktop (wider screens): always show video without rotate hint */
+@media (min-width: 1024px) {
+    .video-modal.show-video-modal .video-modal-rotate-hint {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .video-modal.show-video-modal #video-fullscreen {
+        width: 85%;
+        max-width: 900px;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        opacity: 1;
+        border-radius: 12px;
+        box-shadow: 0 10px 50px rgba(230, 168, 0, 0.3);
+    }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .title-just-you {
+        font-size: 1.8em;
+        padding: 14px 30px;
+    }
+    .title-always {
+        font-size: 1em;
+        padding: 10px 20px;
+        transform: translateX(20px);
+        letter-spacing: 4px;
+    }
+    .video-play-btn {
+        width: 65px;
+        height: 65px;
+    }
+    .video-play-btn svg {
+        width: 40px;
+        height: 40px;
+    }
+    .video-memories-container {
+        width: 95%;
     }
 }

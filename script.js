@@ -245,7 +245,7 @@
         const pinPopupClose = document.getElementById('pin-popup-close');
 
         // DEFAULT PIN: Silakan ubah angka ini jika ingin PIN lain
-        const SECRET_PIN = "0000";
+        const SECRET_PIN = "0606";
 
         let pinAttempt = 0;
         let popupTimeout = null;
@@ -366,22 +366,22 @@
                                 closePinPopup();
                                 setTimeout(() => {
                                     const pinScreen = document.getElementById('pin-screen');
-                                    
+
                                     // 1. Fade out PIN screen
                                     pinScreen.classList.remove('active');
 
                                     // 2. Wait for fade out to complete (1 detik)
                                     setTimeout(() => {
                                         pinScreen.style.display = 'none';
-                                        
+
                                         const loadingScreen = document.getElementById('mini-game-screen');
                                         if (loadingScreen) {
                                             loadingScreen.style.display = 'flex';
-                                            
+
                                             // 3. Jeda sedikit lalu jalankan Fade in Mini Game
                                             setTimeout(() => {
                                                 loadingScreen.style.opacity = '1';
-                                                
+
                                                 // 4. Inisialisasi game setelah mulai muncul
                                                 initMiniGame();
                                             }, 50);
@@ -395,22 +395,22 @@
                                 closePinPopup();
                                 setTimeout(() => {
                                     const pinScreen = document.getElementById('pin-screen');
-                                    
+
                                     // 1. Fade out PIN screen
                                     pinScreen.classList.remove('active');
 
                                     // 2. Wait for fade out to complete (1 detik)
                                     setTimeout(() => {
                                         pinScreen.style.display = 'none';
-                                        
+
                                         const loadingScreen = document.getElementById('mini-game-screen');
                                         if (loadingScreen) {
                                             loadingScreen.style.display = 'flex';
-                                            
+
                                             // 3. Jeda sedikit lalu jalankan Fade in Mini Game
                                             setTimeout(() => {
                                                 loadingScreen.style.opacity = '1';
-                                                
+
                                                 // 4. Inisialisasi game setelah mulai muncul
                                                 initMiniGame();
                                             }, 50);
@@ -1330,4 +1330,119 @@ function buatConfetti() {
 
     // Gelombang 3: Hujan confetti lanjutan
     setTimeout(() => burstWave(40, 0), 2000);
+}
+
+// ==========================================
+// VIDEO MEMORIES - FULLSCREEN LANDSCAPE MODAL
+// ==========================================
+let videoOrientationHandler = null;
+let bgMusicWasPlaying = false;
+
+function openVideoModal() {
+    const modal = document.getElementById('video-modal');
+    const video = document.getElementById('video-fullscreen');
+    const rotateHint = document.getElementById('video-rotate-hint');
+
+    if (!modal || !video) return;
+
+    // Pause background music if it's playing
+    const bgMusic = document.getElementById('bg-music');
+    if (bgMusic && !bgMusic.paused) {
+        bgMusicWasPlaying = true;
+        bgMusic.pause();
+        // Update play/pause icon
+        const iconPlay = document.getElementById('icon-play');
+        const iconPause = document.getElementById('icon-pause');
+        if (iconPlay) iconPlay.style.display = 'block';
+        if (iconPause) iconPause.style.display = 'none';
+    } else {
+        bgMusicWasPlaying = false;
+    }
+
+    // Show modal
+    modal.classList.add('show-video-modal');
+
+    // Lock body scroll
+    document.body.style.overflow = 'hidden';
+
+    // Check orientation and handle video playback
+    function handleOrientation() {
+        const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+        const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+
+        if (isLandscape || isDesktop) {
+            // Landscape or desktop: hide rotate hint, play video
+            if (rotateHint) rotateHint.classList.remove('show-rotate-hint');
+            video.classList.add('video-playing');
+            video.play().catch(err => {
+                console.log('Autoplay blocked:', err);
+            });
+        } else {
+            // Portrait on mobile: show rotate hint, pause video
+            if (rotateHint) rotateHint.classList.add('show-rotate-hint');
+            video.classList.remove('video-playing');
+            video.pause();
+        }
+    }
+
+    // Initial check
+    handleOrientation();
+
+    // Listen for orientation changes
+    const orientationQuery = window.matchMedia('(orientation: landscape)');
+
+    videoOrientationHandler = function (e) {
+        handleOrientation();
+    };
+
+    orientationQuery.addEventListener('change', videoOrientationHandler);
+
+    // Also listen to resize for desktop support
+    window.addEventListener('resize', videoOrientationHandler);
+
+    // Store reference for cleanup
+    modal._orientationQuery = orientationQuery;
+}
+
+function closeVideoModal() {
+    const modal = document.getElementById('video-modal');
+    const video = document.getElementById('video-fullscreen');
+    const rotateHint = document.getElementById('video-rotate-hint');
+
+    if (!modal || !video) return;
+
+    // Pause and reset video
+    video.pause();
+    video.currentTime = 0;
+    video.classList.remove('video-playing');
+
+    // Hide modal
+    modal.classList.remove('show-video-modal');
+
+    // Restore body scroll
+    document.body.style.overflow = '';
+
+    // Resume background music if it was playing before
+    if (bgMusicWasPlaying) {
+        const bgMusic = document.getElementById('bg-music');
+        if (bgMusic) {
+            bgMusic.play().catch(err => console.log('Resume music blocked:', err));
+            // Update play/pause icon
+            const iconPlay = document.getElementById('icon-play');
+            const iconPause = document.getElementById('icon-pause');
+            if (iconPlay) iconPlay.style.display = 'none';
+            if (iconPause) iconPause.style.display = 'block';
+        }
+        bgMusicWasPlaying = false;
+    }
+
+    // Remove rotate hint
+    if (rotateHint) rotateHint.classList.remove('show-rotate-hint');
+
+    // Cleanup orientation listener
+    if (videoOrientationHandler && modal._orientationQuery) {
+        modal._orientationQuery.removeEventListener('change', videoOrientationHandler);
+        window.removeEventListener('resize', videoOrientationHandler);
+        videoOrientationHandler = null;
+    }
 }
